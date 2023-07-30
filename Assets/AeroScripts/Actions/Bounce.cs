@@ -1,23 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Bounce : MonoBehaviour {
+public class Bounce : Action {
     public Vector3 relativeTargetPosition = Vector3.zero;
+    public bool useRelativePosition = false;
+    public Vector3 targetPosition = Vector3.zero;
     public float duration = 2;
     public bool isInfinite = true;
+    public bool isActive = false;
 
     private Vector3 deltaVec; //movement expected per second
     private Vector3 initial_position;
-    private Vector3 targetPosition;
     private bool isGoing = true;
-    private bool isActive = true;
-
+    
 
     // Use this for initialization
-    public void Start () {
-        isActive = relativeTargetPosition!=Vector3.zero;
+    public void Start () 
+    {
+        if (useRelativePosition)
+        {
+            targetPosition = this.transform.position + relativeTargetPosition;
+        }
+        isActive = targetPosition != this.transform.position && targetPosition != Vector3.zero;
         initial_position = this.transform.position;
-        targetPosition = this.transform.position + relativeTargetPosition;
         deltaVec = targetPosition-this.transform.position;
         deltaVec = 2*deltaVec/duration;
     }
@@ -54,6 +59,13 @@ public class Bounce : MonoBehaviour {
         return vec2==Vector3.zero || vec1==vec2;
     }
 
+    public override IEnumerator Initialize()
+    {
+        yield return PositionSelector.selectPosition();
+        this.targetPosition = PositionSelector.getSelectedPosition();
+        //TODO: create a panel to with slider to select duration and checkbox for infinite
+        this.Start();
+    }
 
 
 }

@@ -8,15 +8,27 @@ public class PositionSelector : MonoBehaviour
     private static GameObject selector;
     private static GameObject MainCamera;
     private static GameObject selectorUI;
-    public static Vector3 storedVector;
+    private static bool isDone;
+
 
 
     void Awake()
     {
         //get the selector, i.e. a "pointer" object used to point a position
         selector = GameObject.Find("Position_Selector");
+        //create a selector?
         MainCamera = GameObject.FindWithTag("MainCamera");
         selectorUI = GameObject.FindWithTag("PositionSelectorUI");
+        reset();
+    }
+
+    public static IEnumerator selectPosition()
+    {
+        setSelector();
+        while (isDone == false)
+        {
+            yield return null;
+        }
         reset();
     }
 
@@ -34,11 +46,19 @@ public class PositionSelector : MonoBehaviour
     {
         selector.SetActive(false);
         selectorUI.SetActive(false);
+        isDone = false;
     }
 
-    public void doneSelect()
+    public static void doneSelect()
     {
-        reset();
-        storedVector = selector.transform.position;
+        isDone = true;
     }
+
+    public static Vector3 getSelectedPosition()
+    {
+        return selector.transform.position;
+    }
+
+    
+
 }

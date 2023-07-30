@@ -1,38 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
+public abstract class Action : MonoBehaviour
+{
+    public abstract IEnumerator Initialize();
+}
 
 public class ActionsManager : MonoBehaviour
 {
-
-    // Start is called before the first frame update
-    void Start()
+    // Register Action Here
+    Dictionary<string, Type> ActionDictionary = new Dictionary<string, Type>()
     {
-        
+        {"Bounce", typeof(Bounce)},
+        {"Orbit", typeof(Orbit)}
+    };
+
+    public void AddAction<T>() where T : Action
+    {
+        if (gameObject.GetComponent<T>() != null)
+        {
+            RemoveComponent(typeof(T));
+        }
+        T action = gameObject.AddComponent<T>();
+        StartCoroutine(action.Initialize());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddActionWithName(string actionName)
     {
-        
+        Type T = ActionDictionary[actionName];
+        if (gameObject.GetComponent(T) != null)
+        {
+            RemoveComponent(T);
+        }
+        Component component = gameObject.AddComponent(T);
+        if (component is Action action)
+        {
+            StartCoroutine(action.Initialize());
+        }
     }
 
-    public void AddBounceComponent()
+    public void RemoveComponent(Type T)
     {
-        gameObject.AddComponent<Bounce>();
-        Bounce bounce = gameObject.GetComponent<Bounce>();
-        bounce.relativeTargetPosition = PositionSelector.storedVector - gameObject.transform.position;
-        //TODO: create a panel to with slider to select duration and checkbox for infinite
-        bounce.Start();
-    }
-
-    public void AddOrbitComponent()
-    {
-
-    }
-
-    public void RemoveBounceComponent()
-    {
-        Destroy(gameObject.GetComponent<Bounce>());
+        Destroy(gameObject.GetComponent(T));
     }
 }
