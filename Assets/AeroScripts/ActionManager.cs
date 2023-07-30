@@ -8,7 +8,7 @@ public abstract class Action : MonoBehaviour
     public abstract IEnumerator Initialize();
 }
 
-public class ActionsManager : MonoBehaviour
+public class ActionManager : MonoBehaviour
 {
     // Register Action Here
     Dictionary<string, Type> ActionDictionary = new Dictionary<string, Type>()
@@ -19,9 +19,10 @@ public class ActionsManager : MonoBehaviour
 
     public void AddAction<T>() where T : Action
     {
-        if (gameObject.GetComponent<T>() != null)
+        Action existing = gameObject.GetComponent<Action>();
+        if (existing != null)
         {
-            RemoveComponent(typeof(T));
+            RemoveComponent(existing.GetType());
         }
         T action = gameObject.AddComponent<T>();
         StartCoroutine(action.Initialize());
@@ -45,4 +46,8 @@ public class ActionsManager : MonoBehaviour
     {
         Destroy(gameObject.GetComponent(T));
     }
+
+    public void EditSystem(){}
+
+    public static void pauseAll(){}
 }
