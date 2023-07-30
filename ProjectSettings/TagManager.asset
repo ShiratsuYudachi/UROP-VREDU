@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - PositionSelectorUI
+  - RController
+  - LController
+  - Selectable
+  - ActionListUI
   layers:
   - Default
   - TransparentFX

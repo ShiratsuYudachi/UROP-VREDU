@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Orbit : MonoBehaviour {
+public class Orbit : Action {
     public GameObject centerObject;
+    public bool isOrbitingObject = true;
+    public Vector3 centerPosition;
     public float angularSpeedInDegree = 60;
-    //public float inclinationAngle = 0;
+    public Vector3 centerAxis = Vector3.up; // unit vector of angular velocity
     //public bool isInfinite = true;
-    private bool isActive = true;
+    private bool isActive = false;
 
 
     // Use this for initialization
@@ -16,9 +18,26 @@ public class Orbit : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         if (isActive){
-            this.transform.RotateAround(centerObject.transform.position, Vector3.up, angularSpeedInDegree * Time.deltaTime);
+            centerPosition = isOrbitingObject ? centerObject.transform.position : centerPosition;
+            this.transform.RotateAround(centerPosition, centerAxis, angularSpeedInDegree * Time.deltaTime);
         }
     }
+
+    public override IEnumerator Initialize(){
+        
+        //Add UI to select whether to orbit object
+        if (isOrbitingObject){
+            yield return ObjectSelector.SelectObject();
+            centerObject = ObjectSelector.selectedObject;
+            this.transform.SetParent(centerObject.transform); //fix Aero bug
+        }else
+        {
+            yield return PositionSelector.selectPosition();
+            centerPosition = PositionSelector.getSelectedPosition();
+        }
+        isActive = true;
+    }
+
 
 }
 

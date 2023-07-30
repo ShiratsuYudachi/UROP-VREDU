@@ -10,12 +10,23 @@ public abstract class Action : MonoBehaviour
 
 public class ActionManager : MonoBehaviour
 {
+    public static GameObject ActionListUI = null;
     // Register Action Here
     Dictionary<string, Type> ActionDictionary = new Dictionary<string, Type>()
     {
         {"Bounce", typeof(Bounce)},
         {"Orbit", typeof(Orbit)}
     };
+
+    public void Start()
+    {
+        if (ActionListUI == null)
+        {
+            ActionListUI = GameObject.FindWithTag("ActionListUI");
+            toggleActionListUI();
+        }
+
+    }
 
     public void AddAction<T>() where T : Action
     {
@@ -28,26 +39,53 @@ public class ActionManager : MonoBehaviour
         StartCoroutine(action.Initialize());
     }
 
-    public void AddActionWithName(string actionName)
+    public void AddActionWithNameToSelected(string actionName)
     {
+        GameObject targetObject = ObjectSelector.selectedObject;
         Type T = ActionDictionary[actionName];
-        if (gameObject.GetComponent(T) != null)
+        if (targetObject.GetComponent(T) != null)
         {
             RemoveComponent(T);
         }
-        Component component = gameObject.AddComponent(T);
+        Component component = targetObject.AddComponent(T);
         if (component is Action action)
         {
             StartCoroutine(action.Initialize());
         }
     }
 
-    public void RemoveComponent(Type T)
+    
+    public void RemoveComponent(Type T, GameObject targetObject = null)
     {
-        Destroy(gameObject.GetComponent(T));
+        if (targetObject == null) targetObject = this.gameObject;
+        Destroy(targetObject.GetComponent(T));
     }
+
+
 
     public void EditSystem(){}
 
     public static void pauseAll(){}
+
+    
+    private IEnumerator SelectToEdit()
+    {
+        yield return ObjectSelector.SelectObject();
+        toggleActionListUI();
+        yield return WaitForSelectAction();
+    }
+    public void selectToEdit(){StartCoroutine(SelectToEdit());}
+
+    public static void toggleActionListUI ()
+    {
+        ActionListUI.SetActive(!ActionListUI.activeSelf);
+    }
+
+    public static IEnumerator WaitForSelectAction()
+    {
+        while(ActionListUI.activeSelf)
+        {
+            yield return null;
+        }
+    }
 }
