@@ -5,19 +5,27 @@ using System;
 
 public abstract class Action : MonoBehaviour
 {
+    public bool isActive = false; 
     public abstract IEnumerator Initialize();
+
 }
 
 public class ActionManager : MonoBehaviour
 {
     public static GameObject ActionListUI = null;
+    public static string objectTag = "selectable";
+    public static List<GameObject> activeObjects = new List<GameObject>();
+    public static Dictionary<GameObject,bool> objectActiveState = new Dictionary<GameObject,bool>();
+
     // Register Action Here
-    Dictionary<string, Type> ActionDictionary = new Dictionary<string, Type>()
+    public static Dictionary<string, Type> ActionDictionary = new Dictionary<string, Type>()
     {
         {"Bounce", typeof(Bounce)},
         {"Orbit", typeof(Orbit)},
         {"Spin", typeof(Spin)}
     };
+
+    
 
     public void Start()
     {
@@ -27,6 +35,11 @@ public class ActionManager : MonoBehaviour
             toggleActionListUI();
         }
 
+        activeObjects.Add(this.gameObject);
+        Action action = this.gameObject.GetComponent<Action>();
+        if (action!=null){
+            objectActiveState[this.gameObject] = action.isActive;
+        }
     }
 
     public void AddAction<T>() where T : Action
@@ -66,7 +79,62 @@ public class ActionManager : MonoBehaviour
 
     public void EditSystem(){}
 
-    public static void pauseAll(){}
+    public static void pauseAll()
+    {
+        int i = 0;
+        foreach (var activeObject in activeObjects)
+        {
+            Action[] actions = activeObject.GetComponents<Action>();
+            if (actions!=null)
+            {
+                foreach (var action in actions)
+                {
+                    //objectActiveState[activeObject] = action.isActive;
+                    action.isActive = false; 
+                    Debug.Log("Updated "+activeObject.name+" with action "+action.GetType());
+                }
+            }
+            i+=1;
+            
+        }
+    }
+
+    public static void activeAll()
+    {
+        int i = 0;
+        foreach (var activeObject in activeObjects)
+        {
+            Action[] actions = activeObject.GetComponents<Action>();
+            if (actions!=null)
+            {
+                foreach (var action in actions)
+                {
+                action.isActive = true;
+                Debug.Log("Activated "+activeObject.name+" with action "+action.GetType());
+                }
+            }
+            i+=1;
+        }
+    }
+
+     //TODO, not usable
+    public static void resumeAll()
+    {
+        int i = 0;
+        foreach (var activeObject in activeObjects)
+        {
+            Action[] actions = activeObject.GetComponents<Action>();
+            if (actions!=null)
+            {
+                foreach (var action in actions)
+                {
+                    action.isActive = objectActiveState[activeObject];
+                    Debug.Log("Paused "+activeObject.name+" with action "+action.GetType());
+                }
+            }
+            i+=1;
+        }
+    }
 
     
     private IEnumerator SelectToEdit()

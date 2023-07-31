@@ -8,7 +8,6 @@ public class Orbit : Action {
     public float angularSpeedInDegree = 60;
     public Vector3 centerAxis = Vector3.up; // unit vector of angular velocity
     //public bool isInfinite = true;
-    private bool isActive = false;
 
 
     // Use this for initialization
