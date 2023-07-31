@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spin : Action
 {
     public Vector3 spinAxis;
-    public float spinDuration;
+    public float spinDuration = 1;
     public bool isInfinite;
     bool isActive = false;
 
