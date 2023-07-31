@@ -12,7 +12,7 @@ public class ObjectSelector : MonoBehaviour
     public static GameObject selectedObject;
 
     private static string selectableTag = "Selectable";
-    private static Material highlightMaterial;
+    public static Material highlightMaterial;
     private static Material defaultMaterial;
     private static Transform _selection;
     private static XRRayInteractor rayInteractor;

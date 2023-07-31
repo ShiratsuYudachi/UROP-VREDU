@@ -31,7 +31,7 @@ public class Spin : Action
 
     }
 
-    public override IEnumerator Initialize()
+    public override IEnumerator Initialize(GameObject attachedObject)
     {
         isActive = true;
         yield return null;

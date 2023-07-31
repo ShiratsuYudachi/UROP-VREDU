@@ -57,10 +57,12 @@ public class Bounce : Action {
         return vec2==Vector3.zero || vec1==vec2;
     }
 
-    public override IEnumerator Initialize()
+    public override IEnumerator Initialize(GameObject attachedObject)
     {
-        yield return PositionSelector.selectPosition();
-        this.targetPosition = PositionSelector.getSelectedPosition();
+        //yield return PositionSelector.selectPosition();
+        //this.targetPosition = PositionSelector.getSelectedPosition();
+        yield return DragPositionSelector.DragPositionFor(attachedObject);
+        this.targetPosition = DragPositionSelector.selectedPosition;
         //TODO: create a panel to with slider to select duration and checkbox for infinite
         Start();
         isActive = true;

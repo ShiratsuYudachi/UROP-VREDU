@@ -22,7 +22,7 @@ public class Orbit : Action {
         }
     }
 
-    public override IEnumerator Initialize(){
+    public override IEnumerator Initialize(GameObject attachedObject){
         
         //Add UI to select whether to orbit object
         if (isOrbitingObject){

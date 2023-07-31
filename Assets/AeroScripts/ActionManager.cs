@@ -6,7 +6,7 @@ using System;
 public abstract class Action : MonoBehaviour
 {
     public bool isActive = false; 
-    public abstract IEnumerator Initialize();
+    public abstract IEnumerator Initialize(GameObject attachedObject);
 
 }
 
@@ -42,6 +42,8 @@ public class ActionManager : MonoBehaviour
         }
     }
 
+    //unmaintained
+    /*
     public void AddAction<T>() where T : Action
     {
         Action existing = gameObject.GetComponent<Action>();
@@ -50,8 +52,9 @@ public class ActionManager : MonoBehaviour
             RemoveComponent(existing.GetType());
         }
         T action = gameObject.AddComponent<T>();
-        StartCoroutine(action.Initialize());
+        StartCoroutine(action.Initialize(gameObject));
     }
+    */
 
     public void AddActionWithNameToSelected(string actionName)
     {
@@ -64,7 +67,7 @@ public class ActionManager : MonoBehaviour
         Component component = targetObject.AddComponent(T);
         if (component is Action action)
         {
-            StartCoroutine(action.Initialize());
+            StartCoroutine(action.Initialize(targetObject));
         }
     }
 

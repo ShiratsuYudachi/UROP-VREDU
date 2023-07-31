@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PositionSelector : MonoBehaviour
 {
-    private static GameObject selector;
-    private static GameObject MainCamera;
-    private static GameObject selectorUI;
-    private static bool isDone;
+    public static GameObject selector;
+    public static GameObject MainCamera;
+    public static GameObject selectorUI;
+    public static bool isSelecting;
 
 
 
@@ -25,7 +25,8 @@ public class PositionSelector : MonoBehaviour
     public static IEnumerator selectPosition()
     {
         setSelector();
-        while (isDone == false)
+        isSelecting = true;
+        while (isSelecting)
         {
             yield return null;
         }
@@ -42,16 +43,16 @@ public class PositionSelector : MonoBehaviour
             Quaternion.identity);
     }
 
-    private static void reset()
+    public static void reset()
     {
         selector.SetActive(false);
         selectorUI.SetActive(false);
-        isDone = false;
+        
     }
 
     public static void doneSelect()
     {
-        isDone = true;
+        isSelecting = false;
     }
 
     public static Vector3 getSelectedPosition()
