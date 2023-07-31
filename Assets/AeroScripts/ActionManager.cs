@@ -15,7 +15,8 @@ public class ActionManager : MonoBehaviour
     Dictionary<string, Type> ActionDictionary = new Dictionary<string, Type>()
     {
         {"Bounce", typeof(Bounce)},
-        {"Orbit", typeof(Orbit)}
+        {"Orbit", typeof(Orbit)},
+        {"Spin", typeof(Spin)}
     };
 
     public void Start()
