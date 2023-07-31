@@ -15,7 +15,7 @@ public class PositionSelector : MonoBehaviour
     void Awake()
     {
         //get the selector, i.e. a "pointer" object used to point a position
-        selector = GameObject.Find("Position_Selector");
+        selector = GameObject.Find("PositionSelector");
         //create a selector?
         MainCamera = GameObject.FindWithTag("MainCamera");
         selectorUI = GameObject.FindWithTag("PositionSelectorUI");
