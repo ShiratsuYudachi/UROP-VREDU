@@ -43,6 +43,16 @@ public class PositionSelector : MonoBehaviour
             Quaternion.identity);
     }
 
+    public static void showUI()
+    {
+        selectorUI.SetActive(true);
+    }
+
+    public static void hideUI()
+    {
+        selectorUI.SetActive(false);
+    }
+
     public static void reset()
     {
         selector.SetActive(false);

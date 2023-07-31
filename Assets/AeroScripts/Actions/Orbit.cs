@@ -34,6 +34,8 @@ public class Orbit : Action {
             yield return PositionSelector.selectPosition();
             centerPosition = PositionSelector.getSelectedPosition();
         }
+        yield return AxisSelector.SelectAxis();
+        centerAxis = AxisSelector.SelectedAxis;
         isActive = true;
     }
 
