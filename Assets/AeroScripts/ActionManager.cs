@@ -42,8 +42,6 @@ public class ActionManager : MonoBehaviour
         }
     }
 
-    //unmaintained
-    /*
     public void AddAction<T>() where T : Action
     {
         Action existing = gameObject.GetComponent<Action>();
@@ -54,7 +52,6 @@ public class ActionManager : MonoBehaviour
         T action = gameObject.AddComponent<T>();
         StartCoroutine(action.Initialize(gameObject));
     }
-    */
 
     public void AddActionWithNameToSelected(string actionName)
     {
