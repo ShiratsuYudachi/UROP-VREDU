@@ -36,4 +36,12 @@ public class Spin : Action
         isActive = true;
         yield return null;
     }
+
+    
+    public override void InitializeWith(Dictionary<string,object> param)
+    {
+        isActive = true;
+    }
+
+    
 }

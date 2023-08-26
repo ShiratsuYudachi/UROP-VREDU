@@ -7,8 +7,28 @@ public abstract class Action : MonoBehaviour
 {
     public bool isActive = false; 
     public abstract IEnumerator Initialize(GameObject attachedObject);
+    public abstract void InitializeWith(Dictionary<string,object> param);
+}
+
+
+//stores an update of an action, and release it later
+public class ActionUpdater
+{
+    public GameObject gameObject;
+    public Type actionType;
+    public Dictionary<string,object> pinitializer_param;
+
+    public void update()
+    {
+        ActionManager manager = this.gameObject.GetComponent<ActionManager>();
+        if ( manager != null)
+        {
+            manager.AddAction(actionType, pinitializer_param);
+        }
+    }
 
 }
+
 
 public class ActionManager : MonoBehaviour
 {
@@ -42,16 +62,19 @@ public class ActionManager : MonoBehaviour
         }
     }
 
-    public void AddAction<T>() where T : Action
+    public void AddAction (Type T, Dictionary<string,object> param)
     {
-        Action existing = gameObject.GetComponent<Action>();
-        if (existing != null)
+        if (this.gameObject.GetComponent(T) != null)
         {
-            RemoveComponent(existing.GetType());
+            this.RemoveComponent(T);
         }
-        T action = gameObject.AddComponent<T>();
-        StartCoroutine(action.Initialize(gameObject));
+        Component component = this.gameObject.AddComponent(T);
+        if (component is Action action)//to make sure component is an instance of Action
+        {
+            action.InitializeWith(param);
+        }
     }
+
 
     public void AddActionWithNameToSelected(string actionName)
     {
@@ -69,10 +92,14 @@ public class ActionManager : MonoBehaviour
     }
 
     
-    public void RemoveComponent(Type T, GameObject targetObject = null)
+    public static void RemoveComponentFrom(Type T, GameObject targetObject)
     {
-        if (targetObject == null) targetObject = this.gameObject;
         Destroy(targetObject.GetComponent(T));
+    }
+
+    public void RemoveComponent(Type T)
+    {
+        Destroy(this.gameObject.GetComponent(T));
     }
 
 

@@ -68,6 +68,14 @@ public class Bounce : Action {
         isActive = true;
     }
 
+    
+    public override void InitializeWith(Dictionary<string,object> param)
+    {
+        this.targetPosition = (Vector3)param["targetPosition"];
+        Start();
+        isActive = true;
+    }
+
 
 }
 

@@ -39,6 +39,21 @@ public class Orbit : Action {
         isActive = true;
     }
 
+    
+    public override void InitializeWith(Dictionary<string,object> param)
+    {
+        if (isOrbitingObject){
+            centerObject = (GameObject)param["centerObject"];
+            this.transform.SetParent(centerObject.transform); //fix Aero bug
+        }else
+        {
+            centerPosition = (Vector3)param["centerPosition"];
+        }
+        centerAxis = (Vector3)param["centerAxis"];
+        isActive = true;
+    }
+
+
 
 }
 
