@@ -68,6 +68,13 @@ public class Bounce : Action {
         isActive = true;
     }
 
+    public override IEnumerator InitializeUpdater(ActionUpdater updater)
+    {
+        yield return DragPositionSelector.DragPositionFor(updater.gameObject);
+        updater.param["targetPosition"] = DragPositionSelector.selectedPosition;
+        updater.doneCreate = true;
+    }
+
     
     public override void InitializeWith(Dictionary<string,object> param)
     {

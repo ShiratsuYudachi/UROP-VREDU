@@ -37,7 +37,12 @@ public class Spin : Action
         yield return null;
     }
 
-    
+    public override IEnumerator InitializeUpdater(ActionUpdater updater)
+    {
+        return null;
+        updater.doneCreate = true;
+    }
+
     public override void InitializeWith(Dictionary<string,object> param)
     {
         isActive = true;

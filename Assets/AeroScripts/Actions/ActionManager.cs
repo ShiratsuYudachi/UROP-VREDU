@@ -7,6 +7,11 @@ public abstract class Action : MonoBehaviour
 {
     public bool isActive = false; 
     public abstract IEnumerator Initialize(GameObject attachedObject);
+
+    public abstract IEnumerator InitializeUpdater(ActionUpdater updater);
+    //PBR for class, PBV for struct by default. However 'ref' keyword cannot be used in Iterator so we use class
+    //Target Object is also inside ActionUpdater
+
     public abstract void InitializeWith(Dictionary<string,object> param);
 }
 
@@ -16,14 +21,16 @@ public class ActionUpdater
 {
     public GameObject gameObject;
     public Type actionType;
-    public Dictionary<string,object> pinitializer_param;
+    public Dictionary<string,object> param;
+    
+    public bool doneCreate = false;
 
     public void update()
     {
         ActionManager manager = this.gameObject.GetComponent<ActionManager>();
         if ( manager != null)
         {
-            manager.AddAction(actionType, pinitializer_param);
+            manager.AddAction(actionType, param);
         }
     }
 
@@ -64,11 +71,7 @@ public class ActionManager : MonoBehaviour
 
     public void AddAction (Type T, Dictionary<string,object> param)
     {
-        if (this.gameObject.GetComponent(T) != null)
-        {
-            this.RemoveComponent(T);
-        }
-        Component component = this.gameObject.AddComponent(T);
+        Component component = this.gameObject.GetComponent(T);
         if (component is Action action)//to make sure component is an instance of Action
         {
             action.InitializeWith(param);
@@ -76,7 +79,7 @@ public class ActionManager : MonoBehaviour
     }
 
 
-    public void AddActionWithNameToSelected(string actionName)
+    public void LegacyAddActionWithNameToSelected(string actionName)
     {
         GameObject targetObject = ObjectSelector.selectedObject;
         Type T = ActionDictionary[actionName];
@@ -89,6 +92,26 @@ public class ActionManager : MonoBehaviour
         {
             StartCoroutine(action.Initialize(targetObject));
         }
+    }
+
+    public void AddActionWithNameToSelected(string actionName)
+    {
+        Type T = ActionDictionary[actionName];
+        if (this.gameObject.GetComponent(T) != null)
+        {
+            this.RemoveComponent(T);
+        }
+        ActionUpdater updater = new ActionUpdater();
+        updater.gameObject = ObjectSelector.selectedObject;
+        updater.actionType = T;
+        
+        Component component = this.gameObject.AddComponent(T);
+        if (component is Action action)
+        {
+            StartCoroutine(action.InitializeUpdater(updater));
+            StartCoroutine(Trigger.Listen(typeof(OnStart),updater));
+        }
+        
     }
 
     

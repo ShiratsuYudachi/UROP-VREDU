@@ -39,7 +39,22 @@ public class Orbit : Action {
         isActive = true;
     }
 
-    
+    public override IEnumerator InitializeUpdater(ActionUpdater updater)
+    {
+        if (isOrbitingObject){
+            yield return ObjectSelector.SelectObject();
+            updater.param["centerObject"] = ObjectSelector.selectedObject;
+        }else
+        {
+            yield return PositionSelector.selectPosition();
+            updater.param["centerPosition"] = PositionSelector.getSelectedPosition();
+        }
+        yield return AxisSelector.SelectAxis();
+        updater.param["centerAxis"] = AxisSelector.SelectedAxis;
+
+        updater.doneCreate = true;
+    }
+
     public override void InitializeWith(Dictionary<string,object> param)
     {
         if (isOrbitingObject){
