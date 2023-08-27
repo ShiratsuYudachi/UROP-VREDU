@@ -19,6 +19,7 @@ public class PositionSelector : MonoBehaviour
         //create a selector?
         MainCamera = GameObject.FindWithTag("MainCamera");
         selectorUI = GameObject.FindWithTag("PositionSelectorUI");
+        Debug.Log(MainCamera);
         reset();
     }
 

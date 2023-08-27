@@ -44,7 +44,7 @@ public class DragPositionSelector : MonoBehaviour
 
         GameObject MainCamera = PositionSelector.MainCamera;
         //ratio of dist(TGT,CAM)/dist(Dragger,CMA)
-        scaleMultiplier = Vector3.Distance(targetObject.transform.position,MainCamera.transform.position)
+        scaleMultiplier = Vector3.Distance(targetObject.transform.position, MainCamera.transform.position)
         /Vector3.Distance(MainCamera.transform.position +  MainCamera.transform.rotation * Vector3.forward/2,MainCamera.transform.position);
 
         PositionSelector.setSelector();

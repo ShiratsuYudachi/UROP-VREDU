@@ -39,8 +39,8 @@ public class Spin : Action
 
     public override IEnumerator InitializeUpdater(ActionUpdater updater)
     {
-        return null;
         updater.doneCreate = true;
+        yield return null;
     }
 
     public override void InitializeWith(Dictionary<string,object> param)

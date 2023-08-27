@@ -21,7 +21,7 @@ public class ActionUpdater
 {
     public GameObject gameObject;
     public Type actionType;
-    public Dictionary<string,object> param;
+    public Dictionary<string,object> param = new Dictionary<string,object>();
     
     public bool doneCreate = false;
 
@@ -31,9 +31,12 @@ public class ActionUpdater
         if ( manager != null)
         {
             manager.AddAction(actionType, param);
+            Debug.Log("ActionUpdater: Action Added");
+        }else
+        {
+            Debug.Log("ActionUpdater: Unable to find Update Target");
         }
     }
-
 }
 
 
@@ -71,10 +74,13 @@ public class ActionManager : MonoBehaviour
 
     public void AddAction (Type T, Dictionary<string,object> param)
     {
-        Component component = this.gameObject.GetComponent(T);
+        Component component = this.gameObject.AddComponent(T);
         if (component is Action action)//to make sure component is an instance of Action
         {
             action.InitializeWith(param);
+        }else
+        {
+            Debug.LogError("ActionManager/ERROR: Action Component not found/matched!");
         }
     }
 

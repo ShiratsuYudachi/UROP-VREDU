@@ -8,4 +8,6 @@ EditorBuildSettings:
   m_configObjects:
     Unity.XR.PICO.LivePreview.Settings: {fileID: 11400000, guid: 00c182a7d31404f49b87ca73c7f2672c, type: 2}
     Unity.XR.PXR.Settings: {fileID: 11400000, guid: cdc092bdb56273d4d9ff80039729051a, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 4343c35e42d6254419f994d85def7d7d, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 7d3103cac4d613a4fb0437b31e83980f, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 9f4158239b220e646bcd2447dbdf4dbe, type: 2}

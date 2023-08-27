@@ -27,7 +27,11 @@ public abstract class Trigger
         {
             if(trigger.is_rising_edge())
             {
-                foreach (ActionUpdater updater in updaterList) updater.update();
+                foreach (ActionUpdater updater in updaterList)
+                {
+                    while (!updater.doneCreate) yield return null;
+                    updater.update();
+                }
                 if (trigger.isOnetime()) break;
             }
             yield return null;
@@ -39,11 +43,14 @@ public abstract class Trigger
         Trigger trigger = (Trigger)Activator.CreateInstance(T);
         while(true)
         {
-            if(trigger.is_rising_edge() && updater.doneCreate)
+            if(trigger.is_rising_edge())
             {
+                while (!updater.doneCreate) yield return null;
+                Debug.Log("Trigger: Updating!");
                 updater.update();
                 if (trigger.isOnetime()) break;
             }
+            Debug.Log("Looping");
             yield return null;
         }
     }

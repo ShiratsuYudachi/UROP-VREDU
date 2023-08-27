@@ -81,6 +81,7 @@ public class Bounce : Action {
         this.targetPosition = (Vector3)param["targetPosition"];
         Start();
         isActive = true;
+        Debug.Log("Bounce: Happy Bouncing!");
     }
 
 
