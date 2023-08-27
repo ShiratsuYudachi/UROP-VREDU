@@ -115,7 +115,7 @@ public class ActionManager : MonoBehaviour
         if (component is Action action)
         {
             StartCoroutine(action.InitializeUpdater(updater));
-            StartCoroutine(Trigger.Listen(typeof(OnStart),updater));
+            StartCoroutine(BehaviourBuilder.Listen<OnStart>(updater));
         }
         
     }
