@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
+
+using UnityEngine.XR.Interaction.Toolkit;
+
 
 public class ObjectSelector : MonoBehaviour
 {
-    public XRRayInteractor RayInteractor;
+    public GameObject ControllerObject;
     public Material HighlightMaterial;
+    
 
     public static GameObject selectedObject;
 
@@ -16,18 +21,17 @@ public class ObjectSelector : MonoBehaviour
     private static Material defaultMaterial;
     private static Transform _selection;
     private static XRRayInteractor rayInteractor;
-    private static InputDevice controller; 
+    private static ActionBasedController controller; 
     
     private static bool isSelecting = false;
 
     public void Start()
     {
-        List<InputDevice> devices = new List<InputDevice>();
-        InputDevices.GetDevicesAtXRNode(XRNode.RightHand, devices);
-        controller = devices[0];
-        rayInteractor = RayInteractor;
+        controller = ControllerObject.GetComponent<ActionBasedController>();
+        rayInteractor = ControllerObject.GetComponent<XRRayInteractor>();
         highlightMaterial = HighlightMaterial;
         //StartCoroutine(SelectObject());
+        
     }
 
     public static IEnumerator SelectObject()
@@ -60,7 +64,7 @@ public class ObjectSelector : MonoBehaviour
 
                     _selection = selection;
 
-                    if (controller.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerValue) && triggerValue)
+                    if (controller.activateAction.action.phase == InputActionPhase.Performed)//check trigger isPressed
                     {
                         isSelecting = false;
                         selectedObject = hit.collider.gameObject;
