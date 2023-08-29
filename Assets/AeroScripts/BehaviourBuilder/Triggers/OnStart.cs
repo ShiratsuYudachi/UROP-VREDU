@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OnStart : Trigger
 {
-    
+    //name = "On Start";
     public override bool isTriggered()
     {
         return true;

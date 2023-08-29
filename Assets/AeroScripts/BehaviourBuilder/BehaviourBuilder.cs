@@ -5,8 +5,8 @@ using System;
 
 public class BehaviourBuilder
 {
-    private Type TTrigger;
-    private ActionUpdater[] updaters;
+    public Type TTrigger;
+    public ActionUpdater[] updaters;
 
     public BehaviourBuilder(Type TTrigger, ActionUpdater updater)
     {
@@ -18,6 +18,17 @@ public class BehaviourBuilder
         this.TTrigger = TTrigger;
         this.updaters = updaters;
     }
+    public BehaviourBuilder()
+    {
+        this.TTrigger = null;
+        this.updaters = null;
+    }
+
+    //Register Trigger here
+    public static Dictionary<string, Type> TriggerDictionary = new Dictionary<string, Type>()
+    {
+        {"OnStart", typeof(OnStart)}
+    };
 
     //start to listen trigger for update actions
     public IEnumerator pose()

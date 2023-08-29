@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class Trigger
 {
+    //public static string name;
     private bool last_condition = false;
     public abstract bool isOnetime();
     public abstract bool isTriggered();

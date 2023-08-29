@@ -5,6 +5,7 @@ using System;
 
 public abstract class Action : MonoBehaviour
 {
+    //public static string name;
     public bool isActive = false; 
     public abstract IEnumerator Initialize(GameObject attachedObject);
 

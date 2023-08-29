@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class Orbit : Action {
+    //name = "Orbit";
     public GameObject centerObject;
     public bool isOrbitingObject = true;
     public Vector3 centerPosition;

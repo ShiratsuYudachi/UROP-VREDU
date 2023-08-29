@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class Bounce : Action {
+    //name = "Bounce";
     public Vector3 relativeTargetPosition = Vector3.zero;
     public bool useRelativePosition = false;
     public Vector3 targetPosition = Vector3.zero;

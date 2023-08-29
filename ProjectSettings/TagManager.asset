@@ -9,6 +9,7 @@ TagManager:
   - LController
   - Selectable
   - ActionListUI
+  - BehaviourBuilderUI
   layers:
   - Default
   - TransparentFX
