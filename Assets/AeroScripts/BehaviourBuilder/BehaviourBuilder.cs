@@ -6,14 +6,15 @@ using System;
 public class BehaviourBuilder
 {
     public Type TTrigger;
-    public ActionUpdater[] updaters;
+    
+    public List<ActionUpdater> updaters = new List<ActionUpdater>();
 
     public BehaviourBuilder(Type TTrigger, ActionUpdater updater)
     {
         this.TTrigger = TTrigger;
-        this.updaters = new ActionUpdater[] {updater};
+        this.updaters = new List<ActionUpdater> {updater};
     }
-    public BehaviourBuilder(Type TTrigger, ActionUpdater[] updaters)
+    public BehaviourBuilder(Type TTrigger, List<ActionUpdater> updaters)
     {
         this.TTrigger = TTrigger;
         this.updaters = updaters;
@@ -21,7 +22,7 @@ public class BehaviourBuilder
     public BehaviourBuilder()
     {
         this.TTrigger = null;
-        this.updaters = null;
+        this.updaters = new List<ActionUpdater>();
     }
 
     //Register Trigger here
@@ -31,7 +32,7 @@ public class BehaviourBuilder
     };
 
     //start to listen trigger for update actions
-    public IEnumerator pose()
+    public IEnumerator enable()
     {
         Trigger trigger = (Trigger)Activator.CreateInstance(this.TTrigger);
         while(true)
@@ -49,15 +50,15 @@ public class BehaviourBuilder
         }
     }
 
-    public static IEnumerator Listen<T>(ActionUpdater[] updaters) where T : Trigger
+    public static IEnumerator Listen(Type T, List<ActionUpdater> updaters)
     {
-        BehaviourBuilder builder = new BehaviourBuilder(typeof(T), updaters);
-        yield return builder.pose();
+        BehaviourBuilder builder = new BehaviourBuilder(T, updaters);
+        yield return builder.enable();
     }
-    public static IEnumerator Listen<T>(ActionUpdater updater) where T : Trigger
+    public static IEnumerator Listen(Type T, ActionUpdater updater)
     {
-        BehaviourBuilder builder = new BehaviourBuilder(typeof(T), updater);
-        yield return builder.pose();
+        BehaviourBuilder builder = new BehaviourBuilder(T, updater);
+        yield return builder.enable();
     }
 
 

@@ -20,8 +20,8 @@ public abstract class Action : MonoBehaviour
 //stores an update of an action, and release it later
 public class ActionUpdater
 {
-    public GameObject gameObject;
-    public Type actionType;
+    public GameObject gameObject = null;
+    public Type actionType = null;
     public Dictionary<string,object> param = new Dictionary<string,object>();
     
     public bool doneCreate = false;
@@ -31,7 +31,11 @@ public class ActionUpdater
         ActionManager manager = this.gameObject.GetComponent<ActionManager>();
         if ( manager != null)
         {
-            manager.AddAction(actionType, param);
+            Component component = this.gameObject.GetComponent(actionType);
+            if (component is Action action)//to make sure component is an instance of Action
+                action.InitializeWith(param);
+            else
+                Debug.LogError("ActionManager/ERROR: Action Component not found/matched!");  
             Debug.Log("ActionUpdater: Action Added");
         }else
         {
@@ -60,67 +64,12 @@ public class ActionManager : MonoBehaviour
 
     public void Start()
     {
-        if (ActionListUI == null)
-        {
-            ActionListUI = GameObject.FindWithTag("ActionListUI");
-            toggleActionListUI();
-        }
-
         activeObjects.Add(this.gameObject);
         Action action = this.gameObject.GetComponent<Action>();
         if (action!=null){
             objectActiveState[this.gameObject] = action.isActive;
         }
     }
-
-    public void AddAction (Type T, Dictionary<string,object> param)
-    {
-        Component component = this.gameObject.AddComponent(T);
-        if (component is Action action)//to make sure component is an instance of Action
-        {
-            action.InitializeWith(param);
-        }else
-        {
-            Debug.LogError("ActionManager/ERROR: Action Component not found/matched!");
-        }
-    }
-
-
-    public void LegacyAddActionWithNameToSelected(string actionName)
-    {
-        GameObject targetObject = ObjectSelector.selectedObject;
-        Type T = ActionDictionary[actionName];
-        if (targetObject.GetComponent(T) != null)
-        {
-            RemoveComponent(T);
-        }
-        Component component = targetObject.AddComponent(T);
-        if (component is Action action)
-        {
-            StartCoroutine(action.Initialize(targetObject));
-        }
-    }
-
-    public void AddActionWithNameToSelected(string actionName)
-    {
-        Type T = ActionDictionary[actionName];
-        if (this.gameObject.GetComponent(T) != null)
-        {
-            this.RemoveComponent(T);
-        }
-        ActionUpdater updater = new ActionUpdater();
-        updater.gameObject = ObjectSelector.selectedObject;
-        updater.actionType = T;
-        
-        Component component = this.gameObject.AddComponent(T);
-        if (component is Action action)
-        {
-            StartCoroutine(action.InitializeUpdater(updater));
-            StartCoroutine(BehaviourBuilder.Listen<OnStart>(updater));
-        }
-        
-    }
-
     
     public static void RemoveComponentFrom(Type T, GameObject targetObject)
     {
@@ -132,9 +81,7 @@ public class ActionManager : MonoBehaviour
         Destroy(this.gameObject.GetComponent(T));
     }
 
-
-
-    public void EditSystem(){}
+    //public void EditSystem(){}
 
     public static void pauseAll()
     {
@@ -190,28 +137,6 @@ public class ActionManager : MonoBehaviour
                 }
             }
             i+=1;
-        }
-    }
-
-    
-    private IEnumerator SelectToEdit()
-    {
-        yield return ObjectSelector.SelectObject();
-        toggleActionListUI();
-        yield return WaitForSelectAction();
-    }
-    public void selectToEdit(){StartCoroutine(SelectToEdit());}
-
-    public static void toggleActionListUI ()
-    {
-        ActionListUI.SetActive(!ActionListUI.activeSelf);
-    }
-
-    public static IEnumerator WaitForSelectAction()
-    {
-        while(ActionListUI.activeSelf)
-        {
-            yield return null;
         }
     }
 }

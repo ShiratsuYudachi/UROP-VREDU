@@ -12,6 +12,8 @@ public class ObjectSelector : MonoBehaviour
 {
     public GameObject ControllerObject;
     public Material HighlightMaterial;
+
+    public GameObject UI;
     
 
     public static GameObject selectedObject;
@@ -25,17 +27,22 @@ public class ObjectSelector : MonoBehaviour
     
     private static bool isSelecting = false;
 
+    private static GameObject selectorUI;
+
     public void Start()
     {
         controller = ControllerObject.GetComponent<ActionBasedController>();
         rayInteractor = ControllerObject.GetComponent<XRRayInteractor>();
         highlightMaterial = HighlightMaterial;
+        selectorUI = UI;
+        selectorUI.SetActive(false);
         //StartCoroutine(SelectObject());
         
     }
 
     public static IEnumerator SelectObject()
     {
+        selectorUI.SetActive(true);
         isSelecting = true;
         while (isSelecting)
         {
@@ -76,6 +83,7 @@ public class ObjectSelector : MonoBehaviour
         var _selectionRenderer = _selection.GetComponent<Renderer>();
         _selectionRenderer.material = defaultMaterial;
         _selection = null;
+        selectorUI.SetActive(false);
     }
 
 

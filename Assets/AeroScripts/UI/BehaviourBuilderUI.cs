@@ -8,6 +8,7 @@ public class BehaviourBuilderUI : MonoBehaviour
     public GameObject ActionListUI;
     public GameObject TriggerListUI;
     public GameObject BehaviourPanelTemplate;
+    //public GameObject ObjectSelectorUI;
     public List<BuilderScrollPanelUI> behavioursPanels = new List<BuilderScrollPanelUI>();
     private int editingIndex;
 
@@ -26,10 +27,11 @@ public class BehaviourBuilderUI : MonoBehaviour
     public void SelectTriggerWithNameFor(string triggerName)
     {
         Type T = BehaviourBuilder.TriggerDictionary[triggerName];
-        behavioursPanels[editingIndex-1].behaviour.TTrigger = T;
+        behavioursPanels[editingIndex-1].behaviour.TTrigger = T; //see NewBehaviour
         ResetTriggerList();
         behavioursPanels[editingIndex-1].updateInfo();
     }
+    
 
     public void DisplayTriggerList()
     {
@@ -44,22 +46,14 @@ public class BehaviourBuilderUI : MonoBehaviour
     public void NewBehaviour()
     {
         GameObject panel = Instantiate(BehaviourPanelTemplate,BehaviourPanelTemplate.transform.parent);
-        panel.GetComponent<BuilderScrollPanelUI>().behaviour = new BehaviourBuilder();
+        BuilderScrollPanelUI panelUI = panel.GetComponent<BuilderScrollPanelUI>();
+        panelUI.behaviour = new BehaviourBuilder();
         float panelWidth = panel.GetComponent<RectTransform>().rect.width * panel.transform.localScale.x;
         panel.transform.localPosition = BehaviourPanelTemplate.transform.localPosition + behavioursPanels.ToArray().Length*new Vector3(panelWidth, 0, 0);
         panel.SetActive(true);
-        panel.GetComponent<BuilderScrollPanelUI>().BehaviourIndex = behavioursPanels.ToArray().Length+1;
-        behavioursPanels.Add(panel.GetComponent<BuilderScrollPanelUI>());
+        panelUI.BehaviourIndex = behavioursPanels.ToArray().Length+1;
+        //index 0 is the template, and template is not in behavioursPanels
+        //so behavioursPanels[0] will have BehaviourIndex = 1
+        this.behavioursPanels.Add(panelUI);
     }
-
-
-
-
-
-    
-
-    
-
-    
-
 }
